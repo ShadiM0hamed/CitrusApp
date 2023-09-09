@@ -30,6 +30,7 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
+        print(f"Entered username: {username}, Entered password: {password}")  # Debugging line
         if username in user_database and user_database[username] == password:
             st.success("Logged in as {}".format(username))
 
@@ -57,6 +58,7 @@ if page == "Login":
 
         else:
             st.error("Invalid username or password")
+
 
 elif page == "Signup":
     st.title("Signup Page")
