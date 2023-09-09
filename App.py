@@ -16,7 +16,7 @@ def preprocess_image(image):
     return img
 
 # Map the prediction to the corresponding class label
-class_labels = ['Citrus_Canker', 'Nutrient_Deficiency', 'Healthy_Leaf_Orange', 'Multiple_Diseases', 'Young_Healthy']
+class_labels = ['Citrus Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
 # Initialize session state
 if 'user_database' not in st.session_state:
@@ -57,8 +57,7 @@ if st.session_state.logged_in:
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
     if uploaded_image is not None:
-        # Display the uploaded image
-        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
 
         # Preprocess the input image
         input_image = preprocess_image(Image.open(uploaded_image))
@@ -72,3 +71,5 @@ if st.session_state.logged_in:
 
         # Display the predicted class label
         st.write("Predicted class label:", predicted_class_label)
+        # Display the uploaded image
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
