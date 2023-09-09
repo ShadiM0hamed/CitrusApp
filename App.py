@@ -22,6 +22,10 @@ class_labels = ['Citrus_Canker', 'Nutrient_Deficiency', 'Healthy_Leaf_Orange', '
 if 'user_database' not in st.session_state:
     st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
 
+# Initialize login state
+if 'logged_in' not in st.session_state:
+    st.session_state.logged_in = False
+
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
 
@@ -32,29 +36,8 @@ if page == "Login":
 
     if st.button("Login"):
         if username in st.session_state.user_database and st.session_state.user_database[username] == password:
+            st.session_state.logged_in = True
             st.success("Logged in as {}".format(username))
-            st.title("Citrus Disease Classification")
-            st.write("Upload an image to classify it into one of the following classes:")
-            uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
-
-            if uploaded_image is not None:
-                # Display the uploaded image
-                st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
-
-                # Preprocess the input image
-                input_image = preprocess_image(Image.open(uploaded_image))
-
-                # Make predictions using the loaded model
-                predictions = model.predict(input_image)
-
-                # Get the predicted class index
-                predicted_class_index = np.argmax(predictions)
-                predicted_class_label = class_labels[predicted_class_index]
-
-                # Display the predicted class label
-                st.write("Predicted class label:", predicted_class_label)
-        else:
-            st.error("Invalid username or password")
 
 elif page == "Signup":
     st.title("Signup Page")
@@ -67,3 +50,25 @@ elif page == "Signup":
             st.success("Signup successful! You can now log in.")
         else:
             st.error("Please provide a username and password")
+
+if st.session_state.logged_in:
+    st.title("Citrus Disease Classification")
+    st.write("Upload an image to classify it into one of the following classes:")
+    uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+
+    if uploaded_image is not None:
+        # Display the uploaded image
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
+        # Preprocess the input image
+        input_image = preprocess_image(Image.open(uploaded_image))
+
+        # Make predictions using the loaded model
+        predictions = model.predict(input_image)
+
+        # Get the predicted class index
+        predicted_class_index = np.argmax(predictions)
+        predicted_class_label = class_labels[predicted_class_index]
+
+        # Display the predicted class label
+        st.write("Predicted class label:", predicted_class_label)
