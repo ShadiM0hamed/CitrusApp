@@ -18,8 +18,9 @@ def preprocess_image(image):
 # Map the prediction to the corresponding class label
 class_labels = ['Citrus_Canker', 'Nutrient_Deficiency', 'Healthy_Leaf_Orange', 'Multiple_Diseases', 'Young_Healthy']
 
-# User Database (For demonstration purposes only)
-user_database = {'user1': 'password1', 'user2': 'password2'}
+# Initialize session state
+if 'user_database' not in st.session_state:
+    st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
 
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
@@ -30,11 +31,8 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        print(f"Entered username: {username}, Entered password: {password}")  # Debugging line
-        if username in user_database and user_database[username] == password:
+        if username in st.session_state.user_database and st.session_state.user_database[username] == password:
             st.success("Logged in as {}".format(username))
-
-            # Display the classification section
             st.title("Citrus Disease Classification")
             st.write("Upload an image to classify it into one of the following classes:")
             uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
@@ -55,10 +53,8 @@ if page == "Login":
 
                 # Display the predicted class label
                 st.write("Predicted class label:", predicted_class_label)
-
         else:
             st.error("Invalid username or password")
-
 
 elif page == "Signup":
     st.title("Signup Page")
@@ -67,7 +63,7 @@ elif page == "Signup":
 
     if st.button("Signup"):
         if new_username and new_password:
-            user_database[new_username] = new_password
+            st.session_state.user_database[new_username] = new_password
             st.success("Signup successful! You can now log in.")
         else:
             st.error("Please provide a username and password")
