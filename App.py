@@ -73,3 +73,4 @@ if st.session_state.logged_in:
         st.write("Predicted class label:", predicted_class_label)
         # Display the uploaded image
         st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
