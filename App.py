@@ -16,7 +16,7 @@ def preprocess_image(image):
     return img
 
 # Map the prediction to the corresponding class label
-class_labels = ['Citrus Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
+class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
 # Initialize session state
 if 'user_database' not in st.session_state:
@@ -52,7 +52,7 @@ elif page == "Signup":
             st.error("Please provide a username and password")
 
 if st.session_state.logged_in:
-    st.title("Citrus Disease Classification")
+    st.title("Lemon Disease Classification")
     st.write("Upload an image to classify it into one of the following classes:")
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
