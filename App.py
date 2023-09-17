@@ -58,6 +58,8 @@ def get_user_database():
 def initialize_login_state():
     return {'logged_in': False, 'username': None}
 
+# Define a cache function to store the database
+@st.cache(allow_output_mutation=True)
 def get_database():
     return {'users': get_user_database(), 'login_state': initialize_login_state()}
 
