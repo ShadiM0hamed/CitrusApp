@@ -1,37 +1,4 @@
-import streamlit as st
-import tensorflow as tf
-from tensorflow import keras
-from PIL import Image
-import numpy as np
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
-# Load credentials from JSON file
-creds = ServiceAccountCredentials.from_json_keyfile_name(
-    r'C:\Users\Shady\Downloads\booming-order-399315-4aebce2babfd.json',  # Replace with your credentials file path
-    ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
-)
-
-# Authorize with Google Sheets API
-client = gspread.authorize(creds)
-
-# Open the Google Sheet
-sheet = client.open('Database')  # Replace with your actual sheet name
-
-# Get the default (first) sheet
-worksheet = sheet.get_worksheet(0)
-
-# Example: Writing data to the sheet
-data = [['Username', 'Password'],
-        ['user1', 'password1'],
-        ['user2', 'password2']]
-
-worksheet.insert_rows(data, 2)  # Insert data starting from the 2nd row
-
-# Example: Reading data from the sheet
-all_data = worksheet.get_all_values()
-print(all_data)
-this code worked, can you rewrite the next code to work as the previous
 import streamlit as st
 import tensorflow as tf
 from tensorflow import keras
