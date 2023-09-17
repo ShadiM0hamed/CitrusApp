@@ -62,8 +62,10 @@ def initialize_login_state():
 @st.cache(allow_output_mutation=True)
 def get_database():
     return {'users': get_user_database(), 'login_state': initialize_login_state()}
+
 # Function to check if the username and password match
 def check_credentials(username, password):
+    database = get_database()  # Retrieve the database
     return username in database['users'] and database['users'][username] == password
 
 # Streamlit UI
@@ -75,43 +77,8 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
+        database = get_database()  # Retrieve the database
         if check_credentials(username, password):
             st.session_state['logged_in'] = True
             st.session_state['username'] = username
             st.success("Logged in as {}".format(username))
-
-elif page == "Signup":
-    st.title("Signup Page")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
-
-    if st.button("Signup"):
-        if new_username and new_password:
-            signup_result = add_username_to_sheet(new_username, new_password)
-            st.success(signup_result)
-            database['users'][new_username] = new_password  # Update database
-        else:
-            st.error("Please provide a username and password")
-
-if st.session_state.get('logged_in'):
-    st.title("Lemon Disease Classification")
-    st.write("Upload an image to classify it into one of the following classes:")
-    uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
-
-    if uploaded_image is not None:
-        # Preprocess the input image
-        input_image = preprocess_image(Image.open(uploaded_image))
-
-        # Make predictions using the loaded model
-        predictions = model.predict(input_image)
-
-        # Get the predicted class index
-        predicted_class_index = np.argmax(predictions)
-        predicted_class_label = class_labels[predicted_class_index]
-
-        # Display the predicted class label
-        st.write("Predicted class label:", predicted_class_label)
-
-        # Display the uploaded image
-        st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
-        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
