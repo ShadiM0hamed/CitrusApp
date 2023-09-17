@@ -37,6 +37,19 @@ def add_username_to_sheet(username, password):
         new_row = [username, password]
         worksheet.append_row(new_row)
         return "Signup successful! You can now log in."
+def check_credentials_in_sheet(username, password):
+    sheet = client.open('Database')
+    worksheet = sheet.get_worksheet(0)  # Assuming the data is in the first sheet
+
+    # Get all values from the sheet
+    values = worksheet.get_all_values()
+
+    # Iterate through the rows to check for matching credentials
+    for row in values:
+        if row[0] == username and row[1] == password:
+            return "Login successful!"
+    
+    return "Invalid username or password. Please try again."
 
 
 # Load the trained model
@@ -70,9 +83,13 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        if username in st.session_state.user_database and st.session_state.user_database[username] == password:
+        # Check if the username and password are valid
+        result = check_credentials_in_sheet(username, password)
+        if result == "Login successful!":
             st.session_state.logged_in = True
             st.success("Logged in as {}".format(username))
+        else:
+            st.error(result)
 
 elif page == "Signup":
     st.title("Signup Page")
