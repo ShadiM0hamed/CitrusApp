@@ -3,6 +3,35 @@ import tensorflow as tf
 from tensorflow import keras
 from PIL import Image
 import numpy as np
+import gspread
+from oauth2client.service_account import Credentials
+
+# Load the credentials file for Google Sheets API
+creds = Credentials.from_authorized_user_file('booming-order-399315-05ac3e604c12.json')
+
+# Authorize with Google Sheets API
+client = gspread.authorize(creds)
+
+# Open the Google Sheet
+sheet = client.open('DataBase')
+
+# Function to add username to the database in the Google Sheet
+def add_username_to_sheet(username, password):
+    sheet = client.open('DataBase')
+    worksheet = sheet.get_worksheet(0)  # Assuming the data is in the first sheet
+
+    # Get all values from column A (assuming usernames are in column A)
+    existing_usernames = worksheet.col_values(1)
+
+    # Check if username already exists
+    if username in existing_usernames:
+        return "Username already exists. Please choose a different username."
+    else:
+        # Append the new username and password
+        new_row = [username, password]
+        worksheet.append_row(new_row)
+        return "Signup successful! You can now log in."
+
 
 # Load the trained model
 model = keras.models.load_model('Citrus_Model.h5', compile=False)
