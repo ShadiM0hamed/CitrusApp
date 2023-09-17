@@ -52,6 +52,7 @@ def preprocess_image(image):
 # Map the prediction to the corresponding class label
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
+
 # Initialize session state
 if 'user_database' not in st.session_state:
     st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
@@ -80,8 +81,9 @@ elif page == "Signup":
 
     if st.button("Signup"):
         if new_username and new_password:
-            st.session_state.user_database[new_username] = new_password
-            st.success("Signup successful! You can now log in.")
+            signup_result = add_username_to_sheet(new_username, new_password)
+            st.success(signup_result)
+            st.session_state.user_database[new_username] = new_password  # Update session state
         else:
             st.error("Please provide a username and password")
 
