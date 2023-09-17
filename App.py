@@ -9,7 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # Load credentials from JSON file
 creds = ServiceAccountCredentials.from_json_keyfile_name(
-    'booming-order-399315-05ac3e604c12.json',  # Replace with your credentials file path
+    'booming-order-399315-4aebce2babfd.json',  # Replace with your credentials file path
     ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
 )
 
@@ -17,12 +17,12 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
-sheet = client.open('DataBase')  # Replace with your actual sheet name
+sheet = client.open('Database')  # Replace with your actual sheet name
 
 
 # Function to add username to the database in the Google Sheet
 def add_username_to_sheet(username, password):
-    sheet = client.open('DataBase')
+    sheet = client.open('Database')
     worksheet = sheet.get_worksheet(0)  # Assuming the data is in the first sheet
 
     # Get all values from column A (assuming usernames are in column A)
