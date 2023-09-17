@@ -3,17 +3,22 @@ import tensorflow as tf
 from tensorflow import keras
 from PIL import Image
 import numpy as np
-import gspread
+import spread
+
 from oauth2client.service_account import ServiceAccountCredentials
 
-# Load the credentials file for Google Sheets API
-creds = ServiceAccountCredentials.from_authorized_user_file('booming-order-399315-05ac3e604c12.json')
+# Load credentials from JSON file
+creds = ServiceAccountCredentials.from_json_keyfile_name(
+    'booming-order-399315-05ac3e604c12.json',  # Replace with your credentials file path
+    ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+)
 
 # Authorize with Google Sheets API
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
-sheet = client.open('DataBase')
+sheet = client.open('DataBase')  # Replace with your actual sheet name
+
 
 # Function to add username to the database in the Google Sheet
 def add_username_to_sheet(username, password):
