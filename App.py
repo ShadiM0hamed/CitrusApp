@@ -62,6 +62,9 @@ def initialize_login_state():
 @st.cache(allow_output_mutation=True)
 def get_database():
     return {'users': get_user_database(), 'login_state': initialize_login_state()}
+# Function to check if the username and password match
+def check_credentials(username, password):
+    return username in database['users'] and database['users'][username] == password
 
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
@@ -72,9 +75,9 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        if username in database['users'] and database['users'][username] == password:
-            database['login_state']['logged_in'] = True
-            database['login_state']['username'] = username
+        if check_credentials(username, password):
+            st.session_state['logged_in'] = True
+            st.session_state['username'] = username
             st.success("Logged in as {}".format(username))
 
 elif page == "Signup":
@@ -90,7 +93,7 @@ elif page == "Signup":
         else:
             st.error("Please provide a username and password")
 
-if database['login_state']['logged_in']:
+if st.session_state.get('logged_in'):
     st.title("Lemon Disease Classification")
     st.write("Upload an image to classify it into one of the following classes:")
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
