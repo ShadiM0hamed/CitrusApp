@@ -4,6 +4,7 @@ from tensorflow import keras
 from PIL import Image
 import numpy as np
 import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -63,14 +64,23 @@ st.session_state.user_database = get_user_database()
 # Initialize session state
 st.session_state.user_database = get_user_database()
 
+# Function to get the user database
+def get_user_database():
+    return {'user1': 'password1', 'user2': 'password2'}
+
 # Initialize login state
-if 'logged_in' not in st.session_state:
-    st.session_state.logged_in = False
+def initialize_login_state():
+    return {'logged_in': False, 'username': None}
+
+# Define a cache function to store the database
+@st.cache(allow_output_mutation=True)
+def get_database():
+    return {'users': get_user_database(), 'login_state': initialize_login_state()}
+
+database = get_database()
 
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
-
-print("Session State:", st.session_state)  # Print session state for debugging
 
 if page == "Login":
     st.title("Login Page")
@@ -78,13 +88,10 @@ if page == "Login":
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        print("Attempting to log in with credentials:", username, password)  # Print for debugging
-
-        if username in st.session_state.user_database and st.session_state.user_database[username] == password:
-            st.session_state.logged_in = True
+        if username in database['users'] and database['users'][username] == password:
+            database['login_state']['logged_in'] = True
+            database['login_state']['username'] = username
             st.success("Logged in as {}".format(username))
-            print("Successfully logged in!")  # Print for debugging
-
 
 elif page == "Signup":
     st.title("Signup Page")
@@ -95,11 +102,11 @@ elif page == "Signup":
         if new_username and new_password:
             signup_result = add_username_to_sheet(new_username, new_password)
             st.success(signup_result)
-            st.session_state.user_database[new_username] = new_password  # Update session state
+            database['users'][new_username] = new_password  # Update database
         else:
             st.error("Please provide a username and password")
 
-if st.session_state.logged_in:
+if database['login_state']['logged_in']:
     st.title("Lemon Disease Classification")
     st.write("Upload an image to classify it into one of the following classes:")
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
