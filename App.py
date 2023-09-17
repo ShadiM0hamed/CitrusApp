@@ -81,10 +81,11 @@ elif page == "Signup":
 
     if st.button("Signup"):
         if new_username and new_password:
-            st.session_state.user_database[new_username] = new_password
-            st.success("Signup successful! You can now log in.")
+            result = add_username_to_sheet(new_username, new_password)
+            st.success(result)
         else:
             st.error("Please provide a username and password")
+
 
 if st.session_state.logged_in:
     st.title("Lemon Disease Classification")
