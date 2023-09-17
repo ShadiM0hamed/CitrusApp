@@ -4,7 +4,7 @@ from tensorflow import keras
 from PIL import Image
 import numpy as np
 import gspread
-from oauth2client.service_account import Credentials
+from oauth2client.service_account import ServiceAccountCredentials
 
 # Load the credentials file for Google Sheets API
 creds = Credentials.from_authorized_user_file('booming-order-399315-05ac3e604c12.json')
