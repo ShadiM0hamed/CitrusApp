@@ -9,7 +9,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # Load credentials from JSON file
 creds = ServiceAccountCredentials.from_json_keyfile_name(
-    'booming-order-399315-4aebce2babfd.json',  # Replace with your credentials file path
+    'booming-order-399315-4aebce2babfd.json',
     ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
 )
 
@@ -17,12 +17,11 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
-sheet = client.open('Database')  # Replace with your actual sheet name
+sheet = client.open('Database')
 
 
 # Function to add username to the database in the Google Sheet
 def add_username_to_sheet(username, password):
-    sheet = client.open('Database')
     worksheet = sheet.get_worksheet(0)  # Assuming the data is in the first sheet
 
     # Get all values from column A (assuming usernames are in column A)
@@ -52,10 +51,13 @@ def preprocess_image(image):
 # Map the prediction to the corresponding class label
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
+# Define a cache function to store the database
+@st.cache(allow_output_mutation=True)
+def get_user_database():
+    return {'user1': 'password1', 'user2': 'password2'}
 
 # Initialize session state
-if 'user_database' not in st.session_state:
-    st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
+st.session_state.user_database = get_user_database()
 
 # Initialize login state
 if 'logged_in' not in st.session_state:
@@ -93,8 +95,6 @@ if st.session_state.logged_in:
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
     if uploaded_image is not None:
-
-
         # Preprocess the input image
         input_image = preprocess_image(Image.open(uploaded_image))
 
@@ -107,6 +107,7 @@ if st.session_state.logged_in:
 
         # Display the predicted class label
         st.write("Predicted class label:", predicted_class_label)
+
         # Display the uploaded image
         st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
         st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
