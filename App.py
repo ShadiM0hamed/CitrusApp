@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow import keras
 from PIL import Image
 import numpy as np
-import spread
+import gspread
 
 from oauth2client.service_account import ServiceAccountCredentials
 
