@@ -58,11 +58,8 @@ def get_user_database():
 def initialize_login_state():
     return {'logged_in': False, 'username': None}
 
-@st.cache_data(allow_output_mutation=True)
 def get_database():
     return {'users': get_user_database(), 'login_state': initialize_login_state()}
-
-database = get_database()
 
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
