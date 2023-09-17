@@ -59,6 +59,10 @@ def get_user_database():
 # Initialize session state
 st.session_state.user_database = get_user_database()
 
+
+# Initialize session state
+st.session_state.user_database = get_user_database()
+
 # Initialize login state
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -66,15 +70,21 @@ if 'logged_in' not in st.session_state:
 # Streamlit UI
 page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
 
+print("Session State:", st.session_state)  # Print session state for debugging
+
 if page == "Login":
     st.title("Login Page")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
+        print("Attempting to log in with credentials:", username, password)  # Print for debugging
+
         if username in st.session_state.user_database and st.session_state.user_database[username] == password:
             st.session_state.logged_in = True
             st.success("Logged in as {}".format(username))
+            print("Successfully logged in!")  # Print for debugging
+
 
 elif page == "Signup":
     st.title("Signup Page")
