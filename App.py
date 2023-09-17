@@ -6,8 +6,6 @@ import numpy as np
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-from oauth2client.service_account import ServiceAccountCredentials
-
 # Load credentials from JSON file
 creds = ServiceAccountCredentials.from_json_keyfile_name(
     'booming-order-399315-4aebce2babfd.json',
@@ -52,18 +50,6 @@ def preprocess_image(image):
 # Map the prediction to the corresponding class label
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
-# Define a cache function to store the database
-@st.cache_data()
-def get_user_database():
-    return {'user1': 'password1', 'user2': 'password2'}
-
-# Initialize session state
-st.session_state.user_database = get_user_database()
-
-
-# Initialize session state
-st.session_state.user_database = get_user_database()
-
 # Function to get the user database
 def get_user_database():
     return {'user1': 'password1', 'user2': 'password2'}
@@ -72,8 +58,7 @@ def get_user_database():
 def initialize_login_state():
     return {'logged_in': False, 'username': None}
 
-# Define a cache function to store the database
-@st.cache(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def get_database():
     return {'users': get_user_database(), 'login_state': initialize_login_state()}
 
