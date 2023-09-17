@@ -52,7 +52,7 @@ def preprocess_image(image):
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 
 # Define a cache function to store the database
-@st.cache(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def get_user_database():
     return {'user1': 'password1', 'user2': 'password2'}
 
