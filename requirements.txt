@@ -4,4 +4,4 @@ tensorflow
 Pillow
 keras
 gspread
-oauth2client.service_account
+oauth2client
