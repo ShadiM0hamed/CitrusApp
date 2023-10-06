@@ -91,32 +91,11 @@ if not st.session_state.logged_in:
                 st.session_state.logged_in = True
                 st.success("Logged in as {}".format(username))
 
-                # Clear the page content
-                st.empty()
-
-                st.header("Welcome, User!")
-            
+                # Display a message after successful login
+                st.markdown("## Welcome, User!")
                 st.write("Upload an image to classify it into one of the following classes:")
                 uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
-            
-                if uploaded_image is not None:
-            
-                    # Preprocess the input image
-                    input_image = preprocess_image(Image.open(uploaded_image))
-            
-                    # Make predictions using the loaded model
-                    predictions = model.predict(input_image)
-            
-                    # Get the predicted class index
-                    predicted_class_index = np.argmax(predictions)
-                    predicted_class_label = class_labels[predicted_class_index]
-            
-                    # Display the predicted class label
-                    st.write("Predicted class label:", predicted_class_label)
-                    # Display the uploaded image
-                    st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
-                    st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
-            
+
             else:
                 st.error(result)
 
@@ -131,3 +110,16 @@ if not st.session_state.logged_in:
                 st.success(result)
             else:
                 st.error("Please provide a username and password")
+
+# Stop the script from rendering further
+st.stop()
+
+# Classification Section
+if st.session_state.logged_in and uploaded_image is not None:
+    input_image = preprocess_image(Image.open(uploaded_image))
+    predictions = model.predict(input_image)
+    predicted_class_index = np.argmax(predictions)
+    predicted_class_label = class_labels[predicted_class_index]
+    st.write("Predicted class label:", predicted_class_label)
+    st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
+    st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
