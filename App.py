@@ -91,6 +91,9 @@ if not st.session_state.logged_in:
                 st.session_state.logged_in = True
                 st.success("Logged in as {}".format(username))
 
+                # Clear the page content
+                st.empty()
+
                 st.header("Welcome, User!")
             
                 st.write("Upload an image to classify it into one of the following classes:")
@@ -128,4 +131,3 @@ if not st.session_state.logged_in:
                 st.success(result)
             else:
                 st.error("Please provide a username and password")
-
