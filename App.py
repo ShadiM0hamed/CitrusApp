@@ -77,6 +77,7 @@ if 'logged_in' not in st.session_state:
 st.title("Lemon Disease Classification")
 
 if not st.session_state.logged_in:
+    page_choice = st.radio("Select Page", ["Login", "Signup"])
 
     if page_choice == "Login":
         st.header("Login Page")
@@ -103,7 +104,6 @@ if not st.session_state.logged_in:
                 st.success(result)
             else:
                 st.error("Please provide a username and password")
-    page_choice = st.radio("Select Page", ["Login", "Signup"])
 
 else:
     st.header("Welcome, User!")
