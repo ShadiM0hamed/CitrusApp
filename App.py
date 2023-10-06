@@ -65,7 +65,6 @@ def preprocess_image(image):
 
 # Map the prediction to the corresponding class label
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
-
 # Initialize session state
 if 'user_database' not in st.session_state:
     st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
@@ -78,20 +77,33 @@ if 'logged_in' not in st.session_state:
 st.title("Lemon Disease Classification")
 
 if not st.session_state.logged_in:
-    st.header("Login Page")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    page_choice = st.radio("Select Page", ["Login", "Signup"])
 
-    if st.button("Login"):
-        # Check if the username and password are valid
-        result = check_credentials_in_sheet(username, password)
-        if result == "Login successful!":
-            st.session_state.logged_in = True
-            st.success("Logged in as {}".format(username))
-        else:
-            st.error(result)
+    if page_choice == "Login":
+        st.header("Login Page")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
 
-    st.markdown("[Signup](http://localhost:8501/?page=signup)")
+        if st.button("Login"):
+            # Check if the username and password are valid
+            result = check_credentials_in_sheet(username, password)
+            if result == "Login successful!":
+                st.session_state.logged_in = True
+                st.success("Logged in as {}".format(username))
+            else:
+                st.error(result)
+
+    elif page_choice == "Signup":
+        st.header("Signup Page")
+        new_username = st.text_input("New Username")
+        new_password = st.text_input("New Password", type="password")
+
+        if st.button("Signup"):
+            if new_username and new_password:
+                result = add_username_to_sheet(new_username, new_password)
+                st.success(result)
+            else:
+                st.error("Please provide a username and password")
 
 else:
     st.header("Welcome, User!")
