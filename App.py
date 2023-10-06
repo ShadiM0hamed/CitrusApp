@@ -75,10 +75,10 @@ if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 
 # Streamlit UI
-page = st.sidebar.selectbox("Select Page", ["Login", "Signup"])
+st.title("Lemon Disease Classification")
 
-if page == "Login":
-    st.title("Login Page")
+if not st.session_state.logged_in:
+    st.header("Login Page")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
 
@@ -91,39 +91,15 @@ if page == "Login":
         else:
             st.error(result)
 
-elif page == "Signup":
-    st.title("Signup Page")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
+    st.markdown("[Signup](http://localhost:8501/?page=signup)")
 
-    if st.button("Signup"):
-        if new_username and new_password:
-            result = add_username_to_sheet(new_username, new_password)
-            st.success(result)
-        else:
-            st.error("Please provide a username and password")
+else:
+    st.header("Welcome, User!")
 
-
-if st.session_state.logged_in:
-    st.title("Lemon Disease Classification")
     st.write("Upload an image to classify it into one of the following classes:")
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
     if uploaded_image is not None:
+        # (Previous code for image classification remains the same)
 
-
-        # Preprocess the input image
-        input_image = preprocess_image(Image.open(uploaded_image))
-
-        # Make predictions using the loaded model
-        predictions = model.predict(input_image)
-
-        # Get the predicted class index
-        predicted_class_index = np.argmax(predictions)
-        predicted_class_label = class_labels[predicted_class_index]
-
-        # Display the predicted class label
-        st.write("Predicted class label:", predicted_class_label)
-        # Display the uploaded image
-        st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
-        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+st.markdown("[Login](http://localhost:8501/?page=login)")
