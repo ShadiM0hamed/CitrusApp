@@ -67,6 +67,8 @@ def preprocess_image(image):
 class_labels = ['Lemon Canker', 'Nutrient Deficiency', 'Healthy Leaf', 'Multiple Diseases', 'Young & Healthy']
 # (Previous imports and function definitions remain the same)
 
+# (Previous imports and function definitions remain the same)
+
 # Initialize session state
 if 'user_database' not in st.session_state:
     st.session_state.user_database = {'user1': 'password1', 'user2': 'password2'}
@@ -112,24 +114,26 @@ if not st.session_state.logged_in:
                 st.error("Please provide a username and password")
 
 # This section will be reached after successful login
-st.header("Welcome, User!")
-st.write("Upload an image to classify it into one of the following classes:")
-uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+if st.session_state.logged_in:
+    st.header("Welcome, User!")
+    st.write("Upload an image to classify it into one of the following classes:")
+    uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
-if uploaded_image is not None:
-    # Preprocess the input image
-    input_image = preprocess_image(Image.open(uploaded_image))
+    if uploaded_image is not None:
+        # Preprocess the input image
+        input_image = preprocess_image(Image.open(uploaded_image))
 
-    # Make predictions using the loaded model
-    predictions = model.predict(input_image)
+        # Make predictions using the loaded model
+        predictions = model.predict(input_image)
 
-    # Get the predicted class index
-    predicted_class_index = np.argmax(predictions)
-    predicted_class_label = class_labels[predicted_class_index]
+        # Get the predicted class index
+        predicted_class_index = np.argmax(predictions)
+        predicted_class_label = class_labels[predicted_class_index]
 
-    # Display the predicted class label
-    st.write("Predicted class label:", predicted_class_label)
+        # Display the predicted class label
+        st.write("Predicted class label:", predicted_class_label)
 
-    # Display the uploaded image
-    st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
-    st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+        # Display the uploaded image
+        st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
