@@ -77,7 +77,6 @@ if 'logged_in' not in st.session_state:
 st.title("Lemon Disease Classification")
 
 if not st.session_state.logged_in:
-    page_choice = st.radio("Select Page", ["Login", "Signup"])
 
     if page_choice == "Login":
         st.header("Login Page")
@@ -104,6 +103,7 @@ if not st.session_state.logged_in:
                 st.success(result)
             else:
                 st.error("Please provide a username and password")
+    page_choice = st.radio("Select Page", ["Login", "Signup"])
 
 else:
     st.header("Welcome, User!")
@@ -128,4 +128,3 @@ else:
         # Display the uploaded image
         st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
         st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
-st.markdown("[Login](http://localhost:8501/?page=login)")
