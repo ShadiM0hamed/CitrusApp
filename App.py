@@ -100,6 +100,20 @@ else:
     uploaded_image = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
 
     if uploaded_image is not None:
-        # (Previous code for image classification remains the same)
 
+        # Preprocess the input image
+        input_image = preprocess_image(Image.open(uploaded_image))
+
+        # Make predictions using the loaded model
+        predictions = model.predict(input_image)
+
+        # Get the predicted class index
+        predicted_class_index = np.argmax(predictions)
+        predicted_class_label = class_labels[predicted_class_index]
+
+        # Display the predicted class label
+        st.write("Predicted class label:", predicted_class_label)
+        # Display the uploaded image
+        st.markdown(f'<h1 style="color:#33ff33;font-size:24px;text-align:center;">{predicted_class_label}</h1>', unsafe_allow_html=True)
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
 st.markdown("[Login](http://localhost:8501/?page=login)")
