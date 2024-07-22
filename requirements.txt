@@ -1,6 +1,6 @@
 numpy
 streamlit
-tensorflow
+tensorflow==2.12.0
 Pillow
 keras
 google-api-python-client
